@@ -1,7 +1,13 @@
 import BaseDialog from '@xpf0000/vue-element-dialog'
 import BaseLocationChoose from './index.vue'
-function install(Vue, opt) {
-  console.log('opt: ', opt)
+function install(
+  Vue,
+  opt = {
+    type,
+    key,
+    keyName
+  }
+) {
   if (install.installed) return
   install.installed = true
   Vue.use(BaseDialog)
