@@ -1,6 +1,6 @@
 {
   "name": "@xpf0000/vue-location-choose",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "xu pengfei 250881478@qq.com",
   "main": "src/components/BaseLocationChoose/index.js",
   "unpkg": "src/components/BaseLocationChoose/index.js",
