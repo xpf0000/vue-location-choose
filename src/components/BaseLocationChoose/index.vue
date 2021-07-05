@@ -36,6 +36,7 @@
     data() {
       return {
         location: {
+          detail: {},
           city: '',
           address: '',
           lat: '',
@@ -46,7 +47,20 @@
         keyName: ''
       }
     },
-    watch: {},
+    watch: {
+      'location.lat': {
+        handler() {
+          this.findAddressByLatLng()
+        },
+        immediate: true
+      },
+      'location.lng': {
+        handler() {
+          this.findAddressByLatLng()
+        },
+        immediate: true
+      }
+    },
     created() {
       this.addresses = []
       this.markers = []
@@ -55,6 +69,32 @@
       this.initQQ()
     },
     methods: {
+      findAddressByLatLng() {
+        if (!this.geocoder) {
+          this.geocoder = new qq.maps.Geocoder()
+          this.geocoder.setComplete((result) => {
+            console.log('geocoder getAddress: ', result)
+            let info = result.detail.addressComponents
+            let city = info.city
+            let address = result.detail.nearPois[0].name
+            this.location.city = city
+            this.location.detail = info
+            if (this.isClick) {
+              this.location.address = address
+              this.addresses = result.detail.nearPois.map((item) => {
+                return { value: item.name }
+              })
+            }
+            this.isClick = false
+          })
+        }
+        if (!this.location.lat || !this.location.lng) {
+          return
+        }
+        this.geocoder.getAddress(
+          new qq.maps.LatLng(this.location.lat, this.location.lng)
+        )
+      },
       cityChange() {
         this.addresses = []
       },
@@ -97,6 +137,7 @@
       },
       //点击搜索
       searchKeyword() {
+        this.isClick = false
         this.changed = true
         this.clearOverlays(this.markers) //清除地图上的marker
         this.searchService.setLocation(this.location.city)
@@ -132,6 +173,7 @@
         }
         //添加监听事件   获取鼠标单击事件
         qq.maps.event.addListener(this.map, 'click', (event) => {
+          this.isClick = true
           this.changed = true
           this.clearOverlays(this.markers)
           let marker = new qq.maps.Marker({
@@ -141,19 +183,6 @@
           this.markers.push(marker)
           this.location.lat = marker.position.lat
           this.location.lng = marker.position.lng
-          let geocoder = new qq.maps.Geocoder()
-          geocoder.getAddress(event.latLng)
-          geocoder.setComplete((result) => {
-            console.log('geocoder getAddress: ', result)
-            let info = result.detail.addressComponents
-            let city = info.city
-            let address = result.detail.nearPois[0].name
-            this.location.city = city
-            this.location.address = address
-            this.addresses = result.detail.nearPois.map((item) => {
-              return { value: item.name }
-            })
-          })
         })
         this.searchService = new qq.maps.SearchService({
           complete: (results) => {

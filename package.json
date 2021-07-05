@@ -1,6 +1,6 @@
 {
   "name": "@xpf0000/vue-location-choose",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "xu pengfei 250881478@qq.com",
   "main": "src/components/BaseLocationChoose/index.js",
   "unpkg": "src/components/BaseLocationChoose/index.js",
@@ -23,7 +23,7 @@
     ]
   },
   "dependencies": {
-    "@xpf0000/vue-element-dialog": "^1.0.4",
+    "@xpf0000/vue-element-dialog": "^1.0.8",
     "element-ui": "^2.13.2",
     "vue": "^2.6.11"
   },

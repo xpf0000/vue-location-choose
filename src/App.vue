@@ -10,8 +10,9 @@
     mounted() {},
     methods: {
       show() {
-        this.$baseLocationChoose().then((res) => {
+        this.$baseLocationChoose(this.location).then((res) => {
           console.log('res: ', res)
+          this.location = res
         })
       }
     }
